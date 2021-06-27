@@ -1,7 +1,7 @@
 <template>
   <div id="header">
 		<h1>The Great <br>
-			<span id="colorDisplay">{{ color }}</span>
+			<span id="colorDisplay">{{ this.$store.state.pickedColor }}</span>
 			<br>
 			Guessing Game</h1>
 	</div>

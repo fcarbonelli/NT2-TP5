@@ -10,7 +10,7 @@ export default {
   props: ["color"],
   methods: {
     onClick() {
-      this.$emit("onClick", this.color)
+      this.$store.dispatch("clickSquare",this.color)
     }
   }
 }

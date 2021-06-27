@@ -1,11 +1,11 @@
 <template>
   <div id="app">
    
-    <Header :color="pickedColor"/>
-    <Navbar :message="message" :buttonMessage="buttonMessage" @colorCount="restart($event)" />
+    <Header />
+    <Navbar @colorCount="restart($event)" />
 
-    <div v-for="(color, i) in colors" :key="i">
-      <Square :color="colors[i]" @onClick="clickSquare($event)"/>
+    <div v-for="(color, i) in getColors" :key="i">
+      <Square :color="getColors[i]" />
     </div>
 
   </div>
@@ -24,46 +24,24 @@ export default {
     Square
   },
   mounted(){
-    this.restart()
+    this.restart(6)
   },
   data(){
     return {
-      colors: [],
-      pickedColor:"",
-      message:"",
-      buttonMessage: "New Colors!",
-      
+
     }
   },
   methods: {
     restart(count) {
-      this.message = ""
-      this.buttonMessage = "New Colors!"
-      this.colors = this.createNewColors(count)
-      this.pickedColor = this.colors[this.pickColor(count)];
-    },
+      this.$store.dispatch("setMessage","")
+      this.$store.dispatch("setButtonMessage","New Colors!")
+      this.$store.state.colors = this.createNewColors(count)
+      this.$store.dispatch("setPickedColor",this.$store.state.colors[this.pickColor(count)]);
+    }, 
 
-    clickSquare(color){
-      if (color === this.pickedColor) {
-        this.message = "You Picked Right"
-        this.setAllColorsTo(color)
-        this.buttonMessage = "Play Again!"
-      }
-      else{
-        this.buttonMessage = "Try Again!"
-      }
-
-    },
-
-    setAllColorsTo(color) {
-      squares.forEach(function (square){
-        square.style.backgroundColor = color;
-      })
-    },
-
-    PickColor() {
+    pickColor(count) {
       var quantity;
-      if (isHard) {
+      if (count == 6) {
         quantity = 6;
       } else {
         quantity = 3;
@@ -74,19 +52,25 @@ export default {
     createNewColors(numbers){
       var arr = [];
       for (var i = 0; i < numbers; i++) {
-        arr.push(createRandomStringColor());
+        arr.push(this.createRandomStringColor());
       }
         return arr;
     },
 
     createRandomStringColor(){
-      var newColor = "rgb(" + randomInt() + ", " + randomInt() + ", " + randomInt() + ")" ;
+      var newColor = "rgb(" + this.randomInt() + ", " + this.randomInt() + ", " + this.randomInt() + ")" ;
       //console.log(newColor);
       return newColor;
     },
 
     randomInt(){
       return Math.floor(Math.random() * 256);
+    },
+    
+  },
+  computed: {
+    getColors: function() {
+      return this.$store.state.colors;
     }
   }
 }

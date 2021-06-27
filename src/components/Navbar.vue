@@ -1,7 +1,7 @@
 <template>
   <div id="navigator">
-		<button id="reset" @click="setHard()"> {{ buttonMessage }}}</button>
-		<span id="message"> {{ message }}</span>
+		<button id="reset" @click="setHard()"> {{ this.$store.state.buttonMessage }}</button>
+		<span id="message"> {{ this.$store.state.message }}</span>
 
 		<button id="easy" :class="{selected: !isHard}" @click="setEasy()">easy</button>
 		<button id="hard" :class="{selected: isHard}" @click="setHard()">hard</button>
@@ -14,28 +14,28 @@ export default {
   props: ["message", "buttonMessage"],
   data(){
 	return{ 
-	  isHard: true,
-	  colorCount: 6
+		isHard: true,
+		colorCount: 6,
 	}
   },
   methods:{
-	  setHard(){
-		if (!isHard) {
-			isHard = true;			
-			colorCount = 6;	
-			this.sendDiff(colorCount)		
+	setHard(){
+		if (!this.isHard) {
+			this.isHard = true;			
+			this.colorCount = 6;	
+			this.sendDiff(this.colorCount)		
 		}
-	  },
-	  setEasy(){
-		if (isHard) {
-			isHard = false;			
-			colorCount = 3;			
-			this.sendDiff(colorCount)
+	},
+	setEasy(){
+		if (this.isHard) {
+			this.isHard = false;			
+			this.colorCount = 3;			
+			this.sendDiff(this.colorCount)
 		}
-	  },
-	  sendDiff(count){
-		  this.$emit("colorCount",count)
-	  }
+	},
+	sendDiff(count){
+		this.$emit("colorCount",count)
+	}
   }
 }
 </script>
